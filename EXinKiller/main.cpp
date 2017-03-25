@@ -32,7 +32,7 @@ int main()
     int bRsl = Process32First(hPS, &pe);
 
     stdstr eXin;
-    unsigned int eXinID = 0, eXinUpdateID = 0;
+    unsigned int eXinUpdateID = 0;
     char tmpstr[255];
     size_t p_len = 0;
 
@@ -43,19 +43,12 @@ int main()
         wcstombs_s(&p_len, tmpstr, pe.szExeFile, wcslen(pe.szExeFile));
 
         if (p_len == eXinEXELength)
-        {
             eXin = stdstr(tmpstr);
-            eXinID = pe.th32ProcessID;
-        }
 
         //the name "update.exe" is so common so that i just compare its pid with exin .
         if (strncmp(tmpstr, eXinEXEUpdateName, 11) == 0)
-        {
-            if (pe.th32ProcessID > eXinID)
-            {
-                eXinUpdateID = pe.th32ProcessID;
-            }
-        }
+            eXinUpdateID = pe.th32ProcessID;
+        
         bRsl = Process32Next(hPS, &pe);
     }
     //Run the command, i think it need the admin permission.
